@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مسابقة المتسابقين</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            text-align: center;
+            background-color: #f4f4f9;
+            padding: 20px;
+            color: #333;
+        }
+
+        h2 {
+            font-size: 28px;
+            color: #0056b3;
+        }
+
+        .buttons {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        button {
+            padding: 15px 25px;
+            font-size: 18px;
+            border: none;
+            border-radius: 8px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        button:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+
+        button:hover:enabled {
+            transform: scale(1.05);
+        }
+
+        #result {
+            font-size: 24px;
+            margin-top: 20px;
+            color: #28a745;
+            font-weight: bold;
+        }
+
+        #resetButton {
+            font-size: 20px;
+            padding: 12px 25px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        #resetButton:hover {
+            background-color: #0056b3;
+            transform: scale(1.05);
+        }
+
+        /* تحسين التفاعل على الأجهزة الصغيرة */
+        @media screen and (max-width: 600px) {
+            .buttons {
+                grid-template-columns: 1fr 1fr;
+                gap: 10px;
+            }
+
+            button {
+                font-size: 16px;
+                padding: 12px 20px;
+            }
+
+            #result {
+                font-size: 20px;
+            }
+
+            #resetButton {
+                font-size: 18px;
+                padding: 10px 20px;
+            }
+        }
+
+        /* تحسين التخطيط للأجهزة الأصغر من 400px */
+        @media screen and (max-width: 400px) {
+            .buttons {
+                grid-template-columns: 1fr;
+                gap: 8px;
+            }
+
+            button {
+                font-size: 14px;
+                padding: 10px 18px;
+            }
+
+            #result {
+                font-size: 18px;
+            }
+
+            #resetButton {
+                font-size: 16px;
+                padding: 8px 18px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <h2>المتسابقين في المسابقة</h2>
+
+    <div class="buttons">
+        <button id="player1" style="background-color: #FF5733;" onclick="submitAnswer('اللاعب 1')">اللاعب 1</button>
+        <button id="player2" style="background-color: #33B5FF;" onclick="submitAnswer('اللاعب 2')">اللاعب 2</button>
+        <button id="player3" style="background-color: #FFC300;" onclick="submitAnswer('اللاعب 3')">اللاعب 3</button>
+        <button id="player4" style="background-color: #FF6F61;" onclick="submitAnswer('اللاعب 4')">اللاعب 4</button>
+        <button id="player5" style="background-color: #8E44AD;" onclick="submitAnswer('اللاعب 5')">اللاعب 5</button>
+        <button id="player6" style="background-color: #2ECC71;" onclick="submitAnswer('اللاعب 6')">اللاعب 6</button>
+        <button id="player7" style="background-color: #3498DB;" onclick="submitAnswer('اللاعب 7')">اللاعب 7</button>
+        <button id="player8" style="background-color: #E74C3C;" onclick="submitAnswer('اللاعب 8')">اللاعب 8</button>
+        <button id="player9" style="background-color: #9B59B6;" onclick="submitAnswer('اللاعب 9')">اللاعب 9</button>
+        <button id="player10" style="background-color: #1ABC9C;" onclick="submitAnswer('اللاعب 10')">اللاعب 10</button>
+        <button id="player11" style="background-color: #F39C12;" onclick="submitAnswer('اللاعب 11')">اللاعب 11</button>
+        <button id="player12" style="background-color: #D35400;" onclick="submitAnswer('اللاعب 12')">اللاعب 12</button>
+        <button id="player13" style="background-color: #16A085;" onclick="submitAnswer('اللاعب 13')">اللاعب 13</button>
+        <button id="player14" style="background-color: #27AE60;" onclick="submitAnswer('اللاعب 14')">اللاعب 14</button>
+    </div>
+
+    <div id="result"></div>
+
+    <button id="resetButton" onclick="resetGame()">إعادة تعيين</button>
+
+    <script>
+        let buttons = document.querySelectorAll('button');
+        let resultDiv = document.getElementById('result');
+
+        function submitAnswer(playerName) {
+            disableButtons();
+            resultDiv.innerHTML = `تم الضغط بواسطة: ${playerName}`;
+            localStorage.setItem('buttonsDisabled', 'true');
+            localStorage.setItem('playerName', playerName);
+        }
+
+        function disableButtons() {
+            buttons.forEach(button => {
+                if (button.id !== "resetButton") {
+                    button.disabled = true;
+                }
+            });
+        }
+
+        function enableButtons() {
+            buttons.forEach(button => {
+                button.disabled = false;
+            });
+        }
+
+        function resetGame() {
+            enableButtons();
+            resultDiv.innerHTML = '';
+            localStorage.removeItem('buttonsDisabled');
+            localStorage.removeItem('playerName');
+        }
+
+        window.onload = function() {
+            if (localStorage.getItem('buttonsDisabled') === 'true') {
+                disableButtons();
+                const playerName = localStorage.getItem('playerName');
+                if (playerName) {
+                    resultDiv.innerHTML = `تم الضغط بواسطة: ${playerName}`;
+                }
+            }
+        };
+    </script>
+
+</body>
+</html>
